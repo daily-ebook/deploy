@@ -1,0 +1,22 @@
+version: '2'
+services:
+  redis:
+    image: redis:latest
+
+  mongo:
+    image: mongo:latest
+
+  worker:
+    image: daily-epub-worker
+    depends_on:
+      - redis
+      - mongo
+
+  webapp:
+    image: daily-epub-webapp
+    ports:
+      - "5000:5000"
+    depends_on:
+      - redis
+      - mongo
+      - worker
