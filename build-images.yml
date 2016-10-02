@@ -1,0 +1,15 @@
+- hosts: localhost
+  vars: 
+
+  tasks:
+  - name: build webapp
+    docker_image: 
+      path: "{{ playbook_dir }}/webapp"
+      name: daily-epub/webapp
+      tag: latest
+
+  - name: build worker-ebook
+    docker_image: 
+      path: "{{ playbook_dir }}/worker-ebook"
+      name: daily-epub/worker-ebook
+      tag: latest
