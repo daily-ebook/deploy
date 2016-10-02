@@ -1,5 +1,9 @@
 - hosts: localhost
   vars: 
+    host_folder_webapp: "{{ playbook_dir }}/webapp/"
+    container_folder_webapp: "/webapp"
+    host_folder_worker_ebook: "{{ playbook_dir }}/worker-ebook/"
+    container_folder_worker_ebook: "/worker"
 
   tasks:
   - name: run redis 
@@ -19,7 +23,8 @@
       links:
         - "de-redis:redis"
         - "de-mongo:mongo"
-
+    when: dev is not defined and dev_worker_ebook is not defined
+    
   - name: run daily-epub/webapp
     docker_container: 
       image: daily-epub/webapp:latest
@@ -29,3 +34,30 @@
         - "de-mongo:mongo"
       ports:
         - "5000:5000"
+    when: dev is not defined and dev_webapp is not defined
+  
+  - name: run daily-epub/worker-ebook in dev mode
+    docker_container: 
+      image: daily-epub/worker-ebook:latest
+      name: de-worker-ebook
+      links:
+        - "de-redis:redis"
+        - "de-mongo:mongo"
+      volumes:
+        - "{{ host_folder_worker_ebook }}/:{{ container_folder_worker_ebook }}/"
+    when: dev is defined or dev_worker_ebook is defined
+  
+  - name: run daily-epub/webapp in dev mode
+    docker_container:
+      image: daily-epub/webapp:latest
+      name: de-webapp
+      links:
+        - "de-redis:redis"
+        - "de-mongo:mongo"
+      ports:
+        - "5000:5000"
+      volumes:
+        - "{{ host_folder_webapp }}/:{{ container_folder_webapp }}/"
+    when: dev is defined or dev_webapp is defined
+  
+
