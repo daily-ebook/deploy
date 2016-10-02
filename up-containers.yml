@@ -39,7 +39,7 @@
   - name: run daily-epub/worker-ebook in dev mode
     docker_container: 
       image: daily-epub/worker-ebook:latest
-      name: de-worker-ebook
+      name: de-worker-ebook-dev
       links:
         - "de-redis:redis"
         - "de-mongo:mongo"
@@ -50,7 +50,7 @@
   - name: run daily-epub/webapp in dev mode
     docker_container:
       image: daily-epub/webapp:latest
-      name: de-webapp
+      name: de-webapp-dev
       links:
         - "de-redis:redis"
         - "de-mongo:mongo"
