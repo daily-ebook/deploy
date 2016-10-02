@@ -1,0 +1,31 @@
+- hosts: localhost
+  vars: 
+
+  tasks:
+  - name: run redis 
+    docker_container: 
+      image: redis:latest
+      name: de-redis
+      
+  - name: run mongo
+    docker_container: 
+      image: mongo:latest
+      name: de-mongo
+
+  - name: run daily-epub/worker-ebook
+    docker_container: 
+      image: daily-epub/worker-ebook:latest
+      name: de-worker-ebook
+      links:
+        - "de-redis:redis"
+        - "de-mongo:mongo"
+
+  - name: run daily-epub/webapp
+    docker_container: 
+      image: daily-epub/webapp:latest
+      name: de-webapp
+      links:
+        - "de-redis:redis"
+        - "de-mongo:mongo"
+      ports:
+        - "5000:5000"
