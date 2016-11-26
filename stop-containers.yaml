@@ -1,0 +1,28 @@
+- hosts: localhost
+  vars:
+
+  tasks:
+  - name: Stop de-webapp
+    docker_container:
+      name: de-webapp
+      state: stopped
+
+  - name: Stop de-worker-data-provider
+    docker_container:
+      name: de-worker-data-provider
+      state: stopped
+  
+  - name: Stop de-worker-ebook-generator
+    docker_container:
+      name: de-worker-ebook-generator
+      state: stopped
+
+  - name: Stop de-mongo
+    docker_container:
+      name: de-mongo
+      state: stopped
+
+  - name: Stop de-redis
+    docker_container:
+      name: de-redis
+      state: stopped

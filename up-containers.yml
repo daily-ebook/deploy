@@ -1,32 +1,39 @@
 - hosts: localhost
-  vars: 
+  vars:
     host_folder_webapp: "{{ playbook_dir }}/webapp/"
     container_folder_webapp: "/webapp"
-    host_folder_worker_ebook: "{{ playbook_dir }}/worker-ebook/"
-    container_folder_worker_ebook: "/worker"
+    host_folder_worker_data_provider: "{{ playbook_dir }}/worker-data-provider/"
+    container_folder_worker_data_provider: "/worker"
 
   tasks:
-  - name: run redis 
-    docker_container: 
+  - name: run redis
+    docker_container:
       image: redis:latest
       name: de-redis
       
   - name: run mongo
-    docker_container: 
+    docker_container:
       image: mongo:latest
       name: de-mongo
 
-  - name: run daily-epub/worker-ebook
-    docker_container: 
-      image: daily-epub/worker-ebook:latest
-      name: de-worker-ebook
+  - name: run daily-epub/worker-data-provider
+    docker_container:
+      image: daily-epub/worker-data-provider:latest
+      name: de-worker-data-provider
       links:
         - "de-redis:redis"
         - "de-mongo:mongo"
-    when: dev is not defined and dev_worker_ebook is not defined
-    
+  
+  - name: run daily-epub/worker-ebook-generator
+    docker_container:
+      image: daily-epub/worker-ebook-generator:latest
+      name: de-worker-ebook-generator
+      links:
+        - "de-redis:redis"
+        - "de-mongo:mongo"
+
   - name: run daily-epub/webapp
-    docker_container: 
+    docker_container:
       image: daily-epub/webapp:latest
       name: de-webapp
       links:
@@ -36,21 +43,10 @@
         - "5000:5000"
     when: dev is not defined and dev_webapp is not defined
   
-  - name: run daily-epub/worker-ebook in dev mode
-    docker_container: 
-      image: daily-epub/worker-ebook:latest
-      name: de-worker-ebook-dev
-      links:
-        - "de-redis:redis"
-        - "de-mongo:mongo"
-      volumes:
-        - "{{ host_folder_worker_ebook }}/:{{ container_folder_worker_ebook }}/"
-    when: dev is defined or dev_worker_ebook is defined
-  
   - name: run daily-epub/webapp in dev mode
     docker_container:
       image: daily-epub/webapp:latest
-      name: de-webapp-dev
+      name: de-webapp
       links:
         - "de-redis:redis"
         - "de-mongo:mongo"

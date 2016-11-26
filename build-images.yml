@@ -1,17 +1,24 @@
 - hosts: localhost
-  vars: 
+  vars:
 
   tasks:
   - name: build webapp
-    docker_image: 
+    docker_image:
       path: "{{ playbook_dir }}/webapp"
       name: daily-epub/webapp
       tag: latest
       force: yes
 
-  - name: build worker-ebook
-    docker_image: 
-      path: "{{ playbook_dir }}/worker-ebook"
-      name: daily-epub/worker-ebook
+  - name: build worker-data-provider
+    docker_image:
+      path: "{{ playbook_dir }}/worker-data-provider"
+      name: daily-epub/worker-data-provider
+      tag: latest
+      force: yes
+      
+  - name: build worker-ebook-generator
+    docker_image:
+      path: "{{ playbook_dir }}/worker-ebook-generator"
+      name: daily-epub/worker-ebook-generator
       tag: latest
       force: yes
