@@ -7,3 +7,6 @@
 [submodule "worker-ebook-generator"]
 	path = worker-ebook-generator
 	url = https://github.com/daily-epub/worker-ebook-generator.git
+[submodule "worker-ebook"]
+    path = worker-ebook
+    url = asd
