@@ -1,6 +1,9 @@
 [submodule "webapp"]
 	path = webapp
-	url = https://github.com/daily-epub/webapp
-[submodule "worker-ebook"]
-	path = worker-ebook
-	url = https://github.com/daily-epub/worker-ebook
+	url = https://github.com/daily-epub/webapp.git
+[submodule "worker-data-provider"]
+	path = worker-data-provider
+	url = https://github.com/daily-epub/worker-data-provider.git
+[submodule "worker-ebook-generator"]
+	path = worker-ebook-generator
+	url = https://github.com/daily-epub/worker-ebook-generator.git
