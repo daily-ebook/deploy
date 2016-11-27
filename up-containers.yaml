@@ -15,10 +15,10 @@
         - 6379
       published_ports:
         - 6379:6379
-  #- name: run mongo
-  #  docker_container:
-  #    image: mongo:latest
-  #    name: de-mongo
+  - name: run mongo
+    docker_container:
+      image: mongo:latest
+      name: de-mongo
 
   - name: run daily-epub/worker-data-provider
     docker_container:
@@ -27,17 +27,8 @@
       recreate: yes
       links:
         - de-redis:redis
-  #      - de-mongo:mongo
+        - de-mongo:mongo
   
-  - name: run daily-epub/worker-ebook-generator
-    docker_container:
-      image: daily-epub/worker-ebook-generator:latest
-      name: de-worker-ebook-generator
-      recreate: yes
-      links:
-        - de-redis:redis
-  #     - de-mongo:mongo
-
   - name: run daily-epub/webapp
     docker_container:
       image: daily-epub/webapp:latest
@@ -45,7 +36,7 @@
       recreate: yes
       links:
         - de-redis:redis
-  #      - de-mongo:mongo
+        - de-mongo:mongo
       ports:
         - "5000:5000"
     when: dev is not defined and dev_webapp is not defined
@@ -57,11 +48,21 @@
       recreate: yes
       links:
         - de-redis:redis
-  #     - de-mongo:mongo
+        - de-mongo:mongo
       ports:
         - "5000:5000"
       volumes:
         - "{{ host_folder_webapp }}/:{{ container_folder_webapp }}/"
     when: dev is defined or dev_webapp is defined
   
+  - name: run daily-epub/worker-ebook-generator
+    docker_container:
+      image: daily-epub/worker-ebook-generator:latest
+      name: de-worker-ebook-generator
+      recreate: yes
+      links:
+        - de-redis:redis
+        - de-mongo:mongo
+        - de-webapp:webapp
+
 
